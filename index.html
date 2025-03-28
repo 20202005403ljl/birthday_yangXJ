@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>杨晓静专属生日祝福</title>
+    <title>化州二中高一官方网站</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap');
         
@@ -77,10 +77,8 @@
             height: 420px;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.6s ease;
             cursor: pointer;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
         }
         
         .card.flipped {
@@ -101,18 +99,13 @@
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             background: rgba(255, 255, 255, 0.95);
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            transform-style: preserve-3d;
-            will-change: transform;
         }
         
         .card-front {
-            border: 1px solid rgba(255, 255, 255, 0.9);
+            z-index: 2;
         }
         
         .card-back {
-            background: rgba(255, 255, 255, 0.95);
             transform: rotateY(180deg);
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
@@ -125,7 +118,6 @@
             justify-content: center;
             align-items: center;
             padding: 10px;
-            transform: translateZ(60px);
         }
         
         .avatar {
@@ -250,6 +242,39 @@
             display: none;
         }
         
+        /* 倒计时样式 */
+        .countdown {
+            margin: 2rem auto;
+            font-size: 1.5rem;
+            color: #00796b;
+            text-align: center;
+        }
+        
+        .countdown-number {
+            display: inline-block;
+            min-width: 2em;
+            font-weight: bold;
+        }
+        
+        /* 测试按钮样式 */
+        .test-button {
+            margin: 1rem auto;
+            background: #00796b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .test-button:active {
+            transform: translateY(1px);
+            background: #00695c;
+        }
+        
         /* 樱花特效 */
         .sakura {
             position: fixed;
@@ -260,37 +285,33 @@
             pointer-events: none;
             opacity: 0;
             animation: fall linear forwards, sway ease-in-out infinite;
-            text-shadow: 0 0 5px rgba(255, 182, 193, 0.7);
-            filter: drop-shadow(0 0 3px rgba(255, 182, 193, 0.5));
-            will-change: transform, opacity;
+            text-shadow: 0 0 5px rgba(255, 182, 193, 0.5);
+            filter: drop-shadow(0 0 3px rgba(255, 182, 193, 0.3));
         }
         
         @keyframes fall {
             0% {
-                transform: translateY(-10%) rotate(0deg) translateX(var(--start-x));
+                transform: translateY(-10%) translateX(var(--start-x)) rotate(0deg);
                 opacity: 0;
             }
             10% {
-                opacity: 0.9;
+                opacity: 1;
+            }
+            90% {
+                opacity: 0.8;
             }
             100% {
-                transform: translateY(110vh) rotate(720deg) translateX(calc(var(--start-x) + var(--sway-distance)));
+                transform: translateY(110vh) translateX(calc(var(--start-x) + var(--sway-distance))) rotate(360deg);
                 opacity: 0;
             }
         }
         
         @keyframes sway {
             0%, 100% {
-                transform: translateX(0) rotate(0deg);
-            }
-            25% {
-                transform: translateX(calc(-5px * var(--sway-intensity))) rotate(calc(-2deg * var(--sway-intensity)));
+                transform: translateX(0);
             }
             50% {
-                transform: translateX(calc(5px * var(--sway-intensity))) rotate(calc(2deg * var(--sway-intensity)));
-            }
-            75% {
-                transform: translateX(calc(-5px * var(--sway-intensity))) rotate(calc(-2deg * var(--sway-intensity)));
+                transform: translateX(calc(var(--sway-distance) / 2));
             }
         }
     </style>
@@ -300,55 +321,115 @@
     <div id="particles-js"></div>
     
     <div class="container">
-        <!-- 名字输入框 - 默认显示 -->
-        <div class="name-input" id="nameInputContainer">
+        <!-- 倒计时显示 -->
+        <div id="countdownContainer">
+            <div class="countdown">
+                <h2>时间沙漏</h2>
+                <div>
+                    <span id="countdown-days" class="countdown-number">0</span>天
+                    <span id="countdown-hours" class="countdown-number">0</span>小时
+                    <span id="countdown-minutes" class="countdown-number">0</span>分钟
+                </div>
+            </div>
+            <!-- 测试按钮 -->
+            <button class="test-button" onclick="enableTestMode()">测试入口</button>
+        </div>
+        
+        <!-- 名字输入框 - 初始隐藏 -->
+        <div class="name-input" id="nameInputContainer" style="display: none;">
             <h2>请输入你的名字</h2>
             <input type="text" id="nameInput" placeholder="请输入你的全名">
             <button onclick="checkName()">查看祝福</button>
-            <div class="error-message" id="errorMessage">抱歉，今天不是你的生日哦~</div>
+            <div class="error-message" id="errorMessage">抱歉，找错人辽~</div>
         </div>
         
         <!-- 祝福内容 - 初始隐藏 -->
         <div id="blessingContainer" style="display: none;">
             <header>
-                <h1>亲爱的<span id="friendName">杨晓静</span></h1>
-                <p class="subtitle">在这个特别的日子里，送上我最真挚的祝福</p>
+                <h1><span id="friendName">杨晓静</span>同学</h1>
+                <p class="subtitle">生日快乐~</p>
             </header>
             
             <div class="card-container">
                 <div class="card" id="birthdayCard">
                     <div class="card-front">
-                        <img src="https://source.unsplash.com/random/300x300/?portrait,asian,girl,smile" alt="生日照片" class="avatar">
+                        <img src="yang.jpg" alt="生日照片" class="avatar">
                         <h2 id="dynamicName">杨晓静</h2>
-                        <p>点击卡片查看祝福</p>
+                        <p>CLICK</p>
                     </div>
                     <div class="card-back">
                         <div class="card-back-content">
-                            <h3 style="color: #00796b; margin-bottom: 1rem; font-size: 1.3rem;">给最特别的你</h3>
-                            <div class="typing-text" id="typingText">生日快乐！愿你永远幸福快乐！</div>
-                            <p style="color: #555; text-align: center; margin-top: 0.8rem; font-size: 0.95rem;">每一天都像今天一样美好</p>
-                            <p style="color: #555; text-align: center; margin-top: 0.8rem; font-size: 0.95rem;">愿你的笑容永远灿烂如花</p>
-                            <p style="color: #555; text-align: center; margin-top: 0.8rem; font-size: 0.95rem;">所有的梦想都能实现</p>
-                        </div>
+                            <div class="typing-text" id="typingText">破壳日快乐！杨晓静童鞋！</div>
+                            <p style="color: #555; text-align: center; margin-top: 0.8rem; font-size: 0.95rem;">形式主义的话我就不说了</p>
+                            <p style="color: #555; text-align: center; margin-top: 0.8rem; font-size: 0.95rem;">想提醒一下上课如果看不见的话</p>
+                            <p style="color: #555; text-align: center; margin-top: 0.8rem; font-size: 0.95rem;">尽量戴上眼镜看黑板才行</p>
+                            <p style="color: #555; text-align: center; margin-top: 0.8rem; font-size: 0.95rem;">不然度数还会继续升高的</p>
+                            <p style="color: #555; text-align: center; margin-top: 0.8rem; font-size: 0.95rem;">by 物理老师</p></div>
                     </div>
                 </div>
             </div>
             
             <div class="wishes">
-                <p>感谢你出现在我的生命中</p>
-                <p>愿你的每一天都充满阳光和欢笑</p>
-                <p>生日快乐，最美丽的杨晓静！</p>
+                <p>第一次见有人“明示”</p>
+                <p>。k</p>
             </div>
             
             <footer>
-                <p>© 2023 专属生日祝福 | 只为杨晓静制作</p>
+                <p>化州二中高一22-23班唯一官方网站（！</p>
             </footer>
         </div>
     </div>
     
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
+        // 目标日期 - 2025年3月30日
+        const targetDate = new Date('2025-03-30T00:00:00');
+        let isBirthday = false;
         let isAnimating = false;
+        let testMode = false;
+        
+        // 启用测试模式
+        function enableTestMode() {
+            testMode = true;
+            document.getElementById('countdownContainer').style.display = 'none';
+            document.getElementById('nameInputContainer').style.display = 'block';
+        }
+        
+        // 检查当前日期
+        function checkDate() {
+            const now = new Date();
+            isBirthday = now >= targetDate || testMode;
+            
+            if (isBirthday && !testMode) {
+                document.getElementById('countdownContainer').style.display = 'none';
+                document.getElementById('nameInputContainer').style.display = 'block';
+            }
+        }
+        
+        // 开始倒计时
+        function startCountdown() {
+            function updateCountdown() {
+                const now = new Date();
+                const diff = targetDate - now;
+                
+                if (diff <= 0) {
+                    clearInterval(timer);
+                    checkDate();
+                    return;
+                }
+                
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                
+                document.getElementById('countdown-days').textContent = days;
+                document.getElementById('countdown-hours').textContent = hours;
+                document.getElementById('countdown-minutes').textContent = minutes;
+            }
+            
+            updateCountdown();
+            const timer = setInterval(updateCountdown, 1000);
+        }
         
         // 获取URL参数
         function getQueryParam(name) {
@@ -359,7 +440,7 @@
         // 检查名字
         function checkName() {
             const name = document.getElementById('nameInput').value.trim();
-            if (name === "杨晓静") {
+            if (name === "杨晓静" || testMode) {
                 window.history.pushState({}, '', `?name=${encodeURIComponent(name)}`);
                 document.getElementById('nameInputContainer').style.display = 'none';
                 document.getElementById('blessingContainer').style.display = 'block';
@@ -373,8 +454,14 @@
         
         // 初始化页面
         function initPage() {
+            checkDate();
+            
+            if (!isBirthday) {
+                startCountdown();
+            }
+            
             const name = getQueryParam('name');
-            if (name === "杨晓静") {
+            if (isBirthday && name === "杨晓静") {
                 document.getElementById('nameInputContainer').style.display = 'none';
                 document.getElementById('blessingContainer').style.display = 'block';
                 initEffects();
@@ -440,16 +527,15 @@
         function createSakura() {
             const container = document.body;
             const sakuraCount = 40;
-            const sakuraChars = ['🌸', '❀', '✿', '💮']; // 樱花字符
+            const sakuraChars = ['🌸', '❀', '✿', '💮'];
             
             function createOneSakura() {
                 const sakura = document.createElement('div');
                 sakura.className = 'sakura';
                 
                 // 设置随机属性
-                const startX = Math.random() * 100 - 20; // -20到80
-                const swayDistance = Math.random() * 60 - 30; // -30到30
-                const swayIntensity = Math.random() * 1.5 + 0.5;
+                const startX = Math.random() * 100 - 20;
+                const swayDistance = Math.random() * 60 - 30;
                 const duration = Math.random() * 15 + 10;
                 const delay = Math.random() * 5;
                 const size = Math.random() * 1.2 + 0.8;
@@ -459,7 +545,6 @@
                 sakura.style.cssText = `
                     --start-x: ${startX}px;
                     --sway-distance: ${swayDistance}px;
-                    --sway-intensity: ${swayIntensity};
                     font-size: ${size}em;
                     animation-duration: ${duration}s;
                     animation-delay: ${delay}s;
