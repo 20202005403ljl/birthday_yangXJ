@@ -452,80 +452,82 @@
             }
         }
         
-        // 初始化页面
         function initPage() {
-            checkDate();
-            
-            if (!isBirthday) {
-                startCountdown();
-            }
-            
-            const name = getQueryParam('name');
-            if (isBirthday && name === "杨晓静") {
-                document.getElementById('nameInputContainer').style.display = 'none';
-                document.getElementById('blessingContainer').style.display = 'block';
-                initEffects();
-                createSakura();
-                setTimeout(() => window.scrollTo(0, 1), 100);
-            }
-            
-            document.addEventListener('touchstart', function(){}, {passive: true});
-            document.addEventListener('touchmove', function(e) {
-                e.preventDefault();
-            }, {passive: false});
+        checkDate();
+        
+        if (!isBirthday) {
+            startCountdown();
         }
         
-        // 卡片点击处理
-        function handleCardClick() {
-            if (isAnimating) return;
-            isAnimating = true;
-            this.classList.toggle('flipped');
-            setTimeout(() => isAnimating = false, 600);
+        const name = getQueryParam('name');
+        if (isBirthday && name === "杨晓静") {
+            document.getElementById('nameInputContainer').style.display = 'none';
+            document.getElementById('blessingContainer').style.display = 'block';
+            initEffects();
+            createSakura();
+            setTimeout(() => window.scrollTo(0, 1), 100);
         }
         
-        // 初始化特效
-        function initEffects() {
-            particlesJS("particles-js", {
-                "particles": {
-                    "number": { "value": 40 },
-                    "color": { "value": "#4dd0e1" },
-                    "shape": { "type": "circle" },
-                    "opacity": { "value": 0.5 },
-                    "size": { "value": 2.5 },
-                    "line_linked": {
-                        "enable": true,
-                        "distance": 120,
-                        "color": "#80deea",
-                        "opacity": 0.3,
-                        "width": 1
-                    },
-                    "move": {
-                        "enable": true,
-                        "speed": 3,
-                        "random": true
-                    }
-                },
-                "interactivity": {
-                    "events": {
-                        "onhover": { "enable": false },
-                        "onclick": { "enable": false }
-                    }
-                }
-            });
-            
-            const card = document.getElementById('birthdayCard');
+        // 确保无论如何都会绑定卡片点击事件
+        bindCardEvent();
+        
+        document.addEventListener('touchstart', function(){}, {passive: true});
+        document.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+        }, {passive: false});
+    }
+
+    // 新增：专门绑定卡片事件的函数
+    function bindCardEvent() {
+        const card = document.getElementById('birthdayCard');
+        if (card) {
             card.addEventListener('click', handleCardClick);
             card.addEventListener('touchstart', handleCardClick);
-            
-            setTimeout(() => {
-                document.querySelector('.typing-text').style.animation = 
-                    'typing 3s steps(30, end), blink-caret 0.7s step-end infinite';
-            }, 1200);
         }
+    }
 
-        // 页面加载时初始化
-        document.addEventListener('DOMContentLoaded', initPage);
-        document.addEventListener('gesturestart', e => e.preventDefault());
+    // 修改后的初始化特效函数
+    function initEffects() {
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 40 },
+                "color": { "value": "#4dd0e1" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5 },
+                "size": { "value": 2.5 },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 120,
+                    "color": "#80deea",
+                    "opacity": 0.3,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 3,
+                    "random": true
+                }
+            },
+            "interactivity": {
+                "events": {
+                    "onhover": { "enable": false },
+                    "onclick": { "enable": false }
+                }
+            }
+        });
+        
+        setTimeout(() => {
+            document.querySelector('.typing-text').style.animation = 
+                'typing 3s steps(30, end), blink-caret 0.7s step-end infinite';
+        }, 1200);
+    }
+
+    // 页面加载时初始化
+    document.addEventListener('DOMContentLoaded', function() {
+        // 确保卡片事件绑定最先执行
+        bindCardEvent();
+        initPage();
+    });
     </script>
 </body>
 </html>
