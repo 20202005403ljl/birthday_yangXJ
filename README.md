@@ -332,7 +332,7 @@
                 </div>
             </div>
             <!-- 测试按钮 -->
-            <button class="test-button" onclick="enableTestMode()">测试入口</button>
+            
         </div>
         
         <!-- 名字输入框 - 初始隐藏 -->
