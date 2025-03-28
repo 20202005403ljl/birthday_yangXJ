@@ -256,24 +256,7 @@
             font-weight: bold;
         }
         
-        /* 测试按钮样式 */
-        .test-button {
-            margin: 1rem auto;
-            background: #00796b;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
         
-        .test-button:active {
-            transform: translateY(1px);
-            background: #00695c;
-        }
         
         /* 樱花特效 */
         .sakura {
