@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>杨晓静专属生日祝福</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Ma Shan Zheng', cursive;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 50%, #80deea 100%);
+            background-attachment: fixed;
+            color: #333;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+        
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            opacity: 0.7;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        header {
+            margin-bottom: 1.5rem;
+            padding-top: 1rem;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.8rem;
+            color: #00796b;
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #00695c;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: fadeInUp 0.8s ease forwards 0.5s;
+        }
+        
+        .card-container {
+            perspective: 1000px;
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0;
+            transform-style: preserve-3d;
+        }
+        
+        .card {
+            width: 90%;
+            max-width: 320px;
+            height: 420px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+        
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.95);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+        
+        .card-front {
+            border: 1px solid rgba(255, 255, 255, 0.9);
+        }
+        
+        .card-back {
+            background: rgba(255, 255, 255, 0.95);
+            transform: rotateY(180deg);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .card-back-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            transform: translateZ(60px);
+        }
+        
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #4dd0e1;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .wishes {
+            margin-top: 1.2rem;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #333;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: fadeInUp 0.8s ease forwards 1s;
+            text-align: center;
+            width: 100%;
+            padding: 0 10px;
+        }
+        
+        .typing-text {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 1.4rem;
+            color: #00796b;
+            border-right: 2px solid #4dd0e1;
+            white-space: nowrap;
+            overflow: hidden;
+            margin: 0.8rem auto;
+            width: fit-content;
+            animation: typing 3s steps(30, end), blink-caret 0.7s step-end infinite;
+            text-align: center;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #4dd0e1 }
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        footer {
+            margin-top: 2rem;
+            padding: 1rem;
+            font-size: 0.8rem;
+            color: #00695c;
+            opacity: 0.8;
+        }
+        
+        .name-input {
+            margin: 1.5rem auto;
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .name-input h2 {
+            color: #00796b;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .name-input input {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 8px 0;
+            border: 1px solid #b2ebf2;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .name-input input:focus {
+            border-color: #4dd0e1;
+            box-shadow: 0 0 8px rgba(77, 208, 225, 0.3);
+        }
+        
+        .name-input button {
+            background: #4dd0e1;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin-top: 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 200px;
+        }
+        
+        .name-input button:active {
+            background: #26c6da;
+            transform: translateY(1px);
+        }
+        
+        .error-message {
+            color: #e53935;
+            font-size: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        /* 樱花特效 */
+        .sakura {
+            position: fixed;
+            top: -10%;
+            z-index: 999;
+            color: #ffb6c1;
+            user-select: none;
+            pointer-events: none;
+            opacity: 0;
+            animation: fall linear forwards, sway ease-in-out infinite;
+            text-shadow: 0 0 5px rgba(255, 182, 193, 0.7);
+            filter: drop-shadow(0 0 3px rgba(255, 182, 193, 0.5));
+            will-change: transform, opacity;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(-10%) rotate(0deg) translateX(var(--start-x));
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(110vh) rotate(720deg) translateX(calc(var(--start-x) + var(--sway-distance)));
+                opacity: 0;
+            }
+        }
+        
+        @keyframes sway {
+            0%, 100% {
+                transform: translateX(0) rotate(0deg);
+            }
+            25% {
+                transform: translateX(calc(-5px * var(--sway-intensity))) rotate(calc(-2deg * var(--sway-intensity)));
+            }
+            50% {
+                transform: translateX(calc(5px * var(--sway-intensity))) rotate(calc(2deg * var(--sway-intensity)));
+            }
+            75% {
+                transform: translateX(calc(-5px * var(--sway-intensity))) rotate(calc(-2deg * var(--sway-intensity)));
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div id="particles-js"></div>
+    
+    <div class="container">
+        <!-- 名字输入框 - 默认显示 -->
+        <div class="name-input" id="nameInputContainer">
+            <h2>请输入你的名字</h2>
+            <input type="text" id="nameInput" placeholder="请输入你的全名">
+            <button onclick="checkName()">查看祝福</button>
+            <div class="error-message" id="errorMessage">抱歉，今天不是你的生日哦~</div>
+        </div>
+        
+        <!-- 祝福内容 - 初始隐藏 -->
+        <div id="blessingContainer" style="display: none;">
+            <header>
+                <h1>亲爱的<span id="friendName">杨晓静</span></h1>
+                <p class="subtitle">在这个特别的日子里，送上我最真挚的祝福</p>
+            </header>
+            
+            <div class="card-container">
+                <div class="card" id="birthdayCard">
+                    <div class="card-front">
+                        <img src="https://source.unsplash.com/random/300x300/?portrait,asian,girl,smile" alt="生日照片" class="avatar">
+                        <h2 id="dynamicName">杨晓静</h2>
+                        <p>点击卡片查看祝福</p>
+                    </div>
+                    <div class="card-back">
+                        <div class="card-back-content">
+                            <h3 style="color: #00796b; margin-bottom: 1rem; font-size: 1.3rem;">给最特别的你</h3>
+                            <div class="typing-text" id="typingText">生日快乐！愿你永远幸福快乐！</div>
+                            <p style="color: #555; text-align: center; margin-top: 0.8rem; font-size: 0.95rem;">每一天都像今天一样美好</p>
+                            <p style="color: #555; text-align: center; margin-top: 0.8rem; font-size: 0.95rem;">愿你的笑容永远灿烂如花</p>
+                            <p style="color: #555; text-align: center; margin-top: 0.8rem; font-size: 0.95rem;">所有的梦想都能实现</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="wishes">
+                <p>感谢你出现在我的生命中</p>
+                <p>愿你的每一天都充满阳光和欢笑</p>
+                <p>生日快乐，最美丽的杨晓静！</p>
+            </div>
+            
+            <footer>
+                <p>© 2023 专属生日祝福 | 只为杨晓静制作</p>
+            </footer>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        let isAnimating = false;
+        
+        // 获取URL参数
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+        
+        // 检查名字
+        function checkName() {
+            const name = document.getElementById('nameInput').value.trim();
+            if (name === "杨晓静") {
+                window.history.pushState({}, '', `?name=${encodeURIComponent(name)}`);
+                document.getElementById('nameInputContainer').style.display = 'none';
+                document.getElementById('blessingContainer').style.display = 'block';
+                initEffects();
+                createSakura();
+                setTimeout(() => window.scrollTo(0, 1), 100);
+            } else {
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+        }
+        
+        // 初始化页面
+        function initPage() {
+            const name = getQueryParam('name');
+            if (name === "杨晓静") {
+                document.getElementById('nameInputContainer').style.display = 'none';
+                document.getElementById('blessingContainer').style.display = 'block';
+                initEffects();
+                createSakura();
+                setTimeout(() => window.scrollTo(0, 1), 100);
+            }
+            
+            document.addEventListener('touchstart', function(){}, {passive: true});
+            document.addEventListener('touchmove', function(e) {
+                e.preventDefault();
+            }, {passive: false});
+        }
+        
+        // 卡片点击处理
+        function handleCardClick() {
+            if (isAnimating) return;
+            isAnimating = true;
+            this.classList.toggle('flipped');
+            setTimeout(() => isAnimating = false, 600);
+        }
+        
+        // 初始化特效
+        function initEffects() {
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": { "value": 40 },
+                    "color": { "value": "#4dd0e1" },
+                    "shape": { "type": "circle" },
+                    "opacity": { "value": 0.5 },
+                    "size": { "value": 2.5 },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 120,
+                        "color": "#80deea",
+                        "opacity": 0.3,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 3,
+                        "random": true
+                    }
+                },
+                "interactivity": {
+                    "events": {
+                        "onhover": { "enable": false },
+                        "onclick": { "enable": false }
+                    }
+                }
+            });
+            
+            const card = document.getElementById('birthdayCard');
+            card.addEventListener('click', handleCardClick);
+            card.addEventListener('touchstart', handleCardClick);
+            
+            setTimeout(() => {
+                document.querySelector('.typing-text').style.animation = 
+                    'typing 3s steps(30, end), blink-caret 0.7s step-end infinite';
+            }, 1200);
+        }
+        
+        // 创建樱花特效
+        function createSakura() {
+            const container = document.body;
+            const sakuraCount = 40;
+            const sakuraChars = ['🌸', '❀', '✿', '💮']; // 樱花字符
+            
+            function createOneSakura() {
+                const sakura = document.createElement('div');
+                sakura.className = 'sakura';
+                
+                // 设置随机属性
+                const startX = Math.random() * 100 - 20; // -20到80
+                const swayDistance = Math.random() * 60 - 30; // -30到30
+                const swayIntensity = Math.random() * 1.5 + 0.5;
+                const duration = Math.random() * 15 + 10;
+                const delay = Math.random() * 5;
+                const size = Math.random() * 1.2 + 0.8;
+                const rotation = Math.random() * 360;
+                
+                sakura.textContent = sakuraChars[Math.floor(Math.random() * sakuraChars.length)];
+                sakura.style.cssText = `
+                    --start-x: ${startX}px;
+                    --sway-distance: ${swayDistance}px;
+                    --sway-intensity: ${swayIntensity};
+                    font-size: ${size}em;
+                    animation-duration: ${duration}s;
+                    animation-delay: ${delay}s;
+                    left: ${Math.random() * 100}vw;
+                    opacity: ${Math.random() * 0.7 + 0.3};
+                    transform: rotate(${rotation}deg);
+                `;
+                
+                container.appendChild(sakura);
+                
+                // 动画结束后移除
+                setTimeout(() => {
+                    sakura.remove();
+                }, duration * 1000);
+            }
+            
+            // 初始创建一批樱花
+            for(let i = 0; i < sakuraCount; i++) {
+                setTimeout(createOneSakura, i * 300);
+            }
+            
+            // 持续创建新樱花
+            setInterval(createOneSakura, 300);
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', initPage);
+        document.addEventListener('gesturestart', e => e.preventDefault());
+    </script>
+</body>
+</html>
