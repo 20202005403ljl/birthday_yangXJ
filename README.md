@@ -364,13 +364,14 @@
                             <p style="color: #555; text-align: center; margin-top: 0.8rem; font-size: 0.95rem;">想提醒一下上课如果看不见的话</p>
                             <p style="color: #555; text-align: center; margin-top: 0.8rem; font-size: 0.95rem;">尽量戴上眼镜看黑板才行</p>
                             <p style="color: #555; text-align: center; margin-top: 0.8rem; font-size: 0.95rem;">不然度数还会继续升高的</p>
-                            <p style="color: #555; text-align: center; margin-top: 0.8rem; font-size: 0.95rem;">by 物理老师</p></div>
+                            <p style="color: #555; text-align: center; margin-top: 0.8rem; font-size: 0.95rem;">by 物理老师</p>
+                        </div>
                     </div>
                 </div>
             </div>
             
             <div class="wishes">
-                <p>第一次见有人“明示”</p>
+                <p>第一次见有人"明示"</p>
                 <p>。k</p>
             </div>
             
@@ -452,82 +453,137 @@
             }
         }
         
-        function initPage() {
-        checkDate();
-        
-        if (!isBirthday) {
-            startCountdown();
+        // 卡片点击处理
+        function handleCardClick() {
+            if (isAnimating) return;
+            isAnimating = true;
+            this.classList.toggle('flipped');
+            setTimeout(() => isAnimating = false, 600);
         }
         
-        const name = getQueryParam('name');
-        if (isBirthday && name === "杨晓静") {
-            document.getElementById('nameInputContainer').style.display = 'none';
-            document.getElementById('blessingContainer').style.display = 'block';
-            initEffects();
-            createSakura();
-            setTimeout(() => window.scrollTo(0, 1), 100);
-        }
-        
-        // 确保无论如何都会绑定卡片点击事件
-        bindCardEvent();
-        
-        document.addEventListener('touchstart', function(){}, {passive: true});
-        document.addEventListener('touchmove', function(e) {
-            e.preventDefault();
-        }, {passive: false});
-    }
-
-    // 新增：专门绑定卡片事件的函数
-    function bindCardEvent() {
-        const card = document.getElementById('birthdayCard');
-        if (card) {
-            card.addEventListener('click', handleCardClick);
-            card.addEventListener('touchstart', handleCardClick);
-        }
-    }
-
-    // 修改后的初始化特效函数
-    function initEffects() {
-        particlesJS("particles-js", {
-            "particles": {
-                "number": { "value": 40 },
-                "color": { "value": "#4dd0e1" },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.5 },
-                "size": { "value": 2.5 },
-                "line_linked": {
-                    "enable": true,
-                    "distance": 120,
-                    "color": "#80deea",
-                    "opacity": 0.3,
-                    "width": 1
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 3,
-                    "random": true
-                }
-            },
-            "interactivity": {
-                "events": {
-                    "onhover": { "enable": false },
-                    "onclick": { "enable": false }
-                }
+        // 绑定卡片事件
+        function bindCardEvent() {
+            const card = document.getElementById('birthdayCard');
+            if (card) {
+                card.addEventListener('click', handleCardClick);
+                card.addEventListener('touchstart', handleCardClick, { passive: true });
             }
+        }
+        
+        // 初始化特效
+        function initEffects() {
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": { "value": 40 },
+                    "color": { "value": "#4dd0e1" },
+                    "shape": { "type": "circle" },
+                    "opacity": { "value": 0.5 },
+                    "size": { "value": 2.5 },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 120,
+                        "color": "#80deea",
+                        "opacity": 0.3,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 3,
+                        "random": true
+                    }
+                },
+                "interactivity": {
+                    "events": {
+                        "onhover": { "enable": false },
+                        "onclick": { "enable": false }
+                    }
+                }
+            });
+            
+            setTimeout(() => {
+                document.querySelector('.typing-text').style.animation = 
+                    'typing 3s steps(30, end), blink-caret 0.7s step-end infinite';
+            }, 1200);
+        }
+        
+        // 创建樱花特效
+        function createSakura() {
+            const container = document.body;
+            const sakuraCount = 40;
+            const sakuraChars = ['🌸', '❀', '✿', '💮'];
+            
+            function createOneSakura() {
+                const sakura = document.createElement('div');
+                sakura.className = 'sakura';
+                
+                // 设置随机属性
+                const startX = Math.random() * 100 - 20;
+                const swayDistance = Math.random() * 60 - 30;
+                const duration = Math.random() * 15 + 10;
+                const delay = Math.random() * 5;
+                const size = Math.random() * 1.2 + 0.8;
+                const rotation = Math.random() * 360;
+                
+                sakura.textContent = sakuraChars[Math.floor(Math.random() * sakuraChars.length)];
+                sakura.style.cssText = `
+                    --start-x: ${startX}px;
+                    --sway-distance: ${swayDistance}px;
+                    font-size: ${size}em;
+                    animation-duration: ${duration}s;
+                    animation-delay: ${delay}s;
+                    left: ${Math.random() * 100}vw;
+                    opacity: ${Math.random() * 0.7 + 0.3};
+                    transform: rotate(${rotation}deg);
+                `;
+                
+                container.appendChild(sakura);
+                
+                // 动画结束后移除
+                setTimeout(() => {
+                    sakura.remove();
+                }, duration * 1000);
+            }
+            
+            // 初始创建一批樱花
+            for(let i = 0; i < sakuraCount; i++) {
+                setTimeout(createOneSakura, i * 300);
+            }
+            
+            // 持续创建新樱花
+            setInterval(createOneSakura, 300);
+        }
+
+        // 初始化页面
+        function initPage() {
+            checkDate();
+            
+            if (!isBirthday) {
+                startCountdown();
+            }
+            
+            const name = getQueryParam('name');
+            if (isBirthday && name === "杨晓静") {
+                document.getElementById('nameInputContainer').style.display = 'none';
+                document.getElementById('blessingContainer').style.display = 'block';
+                initEffects();
+                createSakura();
+                setTimeout(() => window.scrollTo(0, 1), 100);
+            }
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 确保卡片事件最先绑定
+            bindCardEvent();
+            initPage();
+            
+            document.addEventListener('touchstart', function(){}, { passive: true });
+            document.addEventListener('touchmove', function(e) {
+                e.preventDefault();
+            }, { passive: false });
         });
         
-        setTimeout(() => {
-            document.querySelector('.typing-text').style.animation = 
-                'typing 3s steps(30, end), blink-caret 0.7s step-end infinite';
-        }, 1200);
-    }
-
-    // 页面加载时初始化
-    document.addEventListener('DOMContentLoaded', function() {
-        // 确保卡片事件绑定最先执行
-        bindCardEvent();
-        initPage();
-    });
+        document.addEventListener('gesturestart', e => e.preventDefault());
     </script>
 </body>
 </html>
